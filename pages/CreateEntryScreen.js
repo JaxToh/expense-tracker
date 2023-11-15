@@ -26,6 +26,7 @@ export default function CreateEntryScreen({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -93,6 +94,7 @@ export default function CreateEntryScreen({
     setTitle("");
     setDescription("");
     setAmount("");
+    setModalVisible(true);
   };
 
   return (
@@ -148,6 +150,24 @@ export default function CreateEntryScreen({
         <TouchableOpacity style={styles.submitButton} onPress={submitEntry}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
+
+        {modalVisible && (
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text>Entry Added Successfully!</Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+        )}
       </ScrollView>
     </KeyboardAwareScrollView>
   );
