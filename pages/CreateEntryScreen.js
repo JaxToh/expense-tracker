@@ -32,11 +32,7 @@ export default function CreateEntryScreen() {
         const cameraRollStatus =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-
-        if (
-          cameraRollStatus.status !== "granted" ||
-          cameraStatus.status !== "granted"
-        ) {
+        if (cameraRollStatus.status !== "granted" || cameraStatus.status !== "granted") {
           alert("Sorry, we need camera and camera roll permissions!");
         }
       }
