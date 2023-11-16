@@ -5,6 +5,7 @@ import HomeScreen from "./pages/HomeScreen";
 import CreateEntryScreen from "./pages/CreateEntryScreen";
 import SalesScreen from "./pages/SalesScreen";
 import ExpensesScreen from "./pages/ExpensesScreen";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import "react-native-gesture-handler";
 
 export default function App() {
@@ -23,14 +24,17 @@ export default function App() {
                 iconName = focused
                   ? "ios-information-circle"
                   : "ios-information-circle-outline";
-              } else if (route.name === "Settings") {
+              } else if (route.name === "Create") {
+                iconName = focused ? "ios-add-circle" : "ios-add-circle-outline";
+              } else if (route.name === "Sales") {
+                iconName = focused ? "ios-list" : "ios-list-outline";
+              } else if (route.name === "Expenses") {
                 iconName = focused ? "ios-list" : "ios-list-outline";
               }
 
-              // You can return any component that you like here!
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: "tomato",
+            tabBarActiveTintColor: "green",
             tabBarInactiveTintColor: "gray",
           })}
         >

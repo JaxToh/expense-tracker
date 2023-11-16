@@ -35,6 +35,7 @@ export default function ExpensesScreen() {
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
     >
+      <Text style={styles.titleText}>Tap on each entry to view image</Text>
       <View style={styles.entryContainer}>
         {expensesEntries.length > 0 ? (
           expensesEntries.map((entry) => (
@@ -43,12 +44,18 @@ export default function ExpensesScreen() {
               style={styles.entry}
               onPress={() => displayImage(entry.image)}
             >
-              <Text>{`Title: ${entry.title}`}</Text>
-              <Text>{`Description: ${entry.description}`}</Text>
-              <Text>{`Amount: ${entry.amount}`}</Text>
+              <View style={styles.entryTextContainer}>
+                <Text style={styles.entryText}>{`Title: ${entry.title}`}</Text>
+                <Text
+                  style={styles.entryText}
+                >{`Description: ${entry.description}`}</Text>
+                <Text
+                  style={styles.entryText}
+                >{`Amount: $${entry.amount}`}</Text>
+              </View>
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => deleteExpensesEntry(entry.id)}
+                style={styles.deleteButton}
+                onPress={() => deleteSalesEntry(entry.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -96,9 +103,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   titleText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 50,
+    fontSize: 12,
+    color: "grey",
+    marginTop: 10,
+    marginBottom: -10,
+    alignSelf: "center",
   },
   imageContainer: {
     marginTop: 20,
@@ -152,11 +161,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f9f9f9",
     marginTop: 20,
+    marginLeft: 10,
   },
   entry: {
-    marginBottom: 20,
+    marginBottom: 1,
     padding: 15,
     backgroundColor: "#f9f9f9",
+    borderRadius: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  entryTextContainer: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  deleteButton: {
+    backgroundColor: "#4EB151",
+    padding: 10,
     borderRadius: 5,
   },
   noRecordsContainer: {
