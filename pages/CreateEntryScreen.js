@@ -13,7 +13,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
 export default function CreateEntryScreen() {
   const { state, dispatch } = useContext(AppContext);
@@ -28,7 +28,7 @@ export default function CreateEntryScreen() {
 
   useEffect(() => {
     (async () => {
-      if (Constants.platform.ios) {
+      if (Constants.platform.ios || Constants.platform.android) {
         const cameraRollStatus =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
@@ -69,11 +69,11 @@ export default function CreateEntryScreen() {
   };
 
   const addExpensesEntry = (newEntry) => {
-    dispatch({type: "ADD_EXPENSES_ENTRY", payload: { newEntry }});
+    dispatch({ type: "ADD_EXPENSES_ENTRY", payload: { newEntry } });
   };
 
-  const addSalesEntry= (newEntry) => {
-    dispatch({type: "ADD_SALES_ENTRY", payload: { newEntry }});
+  const addSalesEntry = (newEntry) => {
+    dispatch({ type: "ADD_SALES_ENTRY", payload: { newEntry } });
   };
 
   const submitEntry = () => {
