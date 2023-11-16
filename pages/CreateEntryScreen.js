@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AppContext } from "./AppContext";
+import { AppContext } from "../AppContext";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -53,7 +52,7 @@ export default function CreateEntryScreen() {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.uri);
     }
   };
 
@@ -109,9 +108,8 @@ export default function CreateEntryScreen() {
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
-          {/* <Text style={styles.titleText}>Expense Tracker App</Text> */}
           <View style={styles.imageContainer}>
             {image ? (
               <Image source={{ uri: image }} style={styles.image} />
@@ -129,6 +127,8 @@ export default function CreateEntryScreen() {
           </TouchableOpacity>
         </View>
         <Picker
+          style={styles.picker}
+          itemStyle={styles.pickerItem}
           selectedValue={type}
           onValueChange={(itemValue) => setType(itemValue)}
         >
@@ -154,6 +154,7 @@ export default function CreateEntryScreen() {
           placeholder="Amount"
           keyboardType="numeric"
         />
+
         <TouchableOpacity style={styles.submitButton} onPress={submitEntry}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
@@ -175,7 +176,7 @@ export default function CreateEntryScreen() {
             </View>
           </Modal>
         )}
-      </ScrollView>
+      </View>
     </KeyboardAwareScrollView>
   );
 }
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 20,
   },
   titleText: {
     fontSize: 24,
@@ -281,5 +282,15 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 20,
+  },
+  picker: {
+    height: 110,
+    marginBottom: 10,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+  },
+
+  pickerItem: {
+    height: 110,
   },
 });

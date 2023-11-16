@@ -11,12 +11,12 @@ const appReducer = (state, action) => {
     case "ADD_SALES_ENTRY":
       return {
         ...state,
-        salesEntries: [...state.salesEntries, action.payload],
+        salesEntries: [...state.salesEntries, action.payload.newEntry],
       };
     case "ADD_EXPENSES_ENTRY":
       return {
         ...state,
-        expensesEntries: [...state.expensesEntries, action.payload],
+        expensesEntries: [...state.expensesEntries, action.payload.newEntry],
       };
     case "DELETE_SALES_ENTRY":
       const updatedSalesEntries = state.salesEntries.filter(

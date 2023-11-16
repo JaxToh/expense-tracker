@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { AppContext } from "./AppContext";
+import { AppContext } from "../AppContext";
 import {
   StyleSheet,
   Text,
@@ -46,7 +46,10 @@ export default function ExpensesScreen() {
               <Text>{`Title: ${entry.title}`}</Text>
               <Text>{`Description: ${entry.description}`}</Text>
               <Text>{`Amount: ${entry.amount}`}</Text>
-              <TouchableOpacity style={styles.button} onPress={() => deleteExpensesEntry(entry.id)}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => deleteExpensesEntry(entry.id)}
+              >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </TouchableOpacity>
