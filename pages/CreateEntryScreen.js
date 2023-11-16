@@ -252,15 +252,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     borderRadius: 5,
   },
-  noRecordsContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  noRecordsText: {
-    fontSize: 16,
-  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
