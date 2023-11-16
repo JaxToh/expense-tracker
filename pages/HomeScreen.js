@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginTop: 20,
-    width: 200,
+    width: 400,
     height: 200,
     borderWidth: 1,
     borderColor: "#ddd",

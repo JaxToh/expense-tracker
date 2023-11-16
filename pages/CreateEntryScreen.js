@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AppContext } from "./AppContext";
 import {
   StyleSheet,
   Text,
   View,
-  Picker,
   Button,
   Image,
   TouchableOpacity,
@@ -14,13 +14,12 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Picker } from '@react-native-picker/picker';
 
-export default function CreateEntryScreen({
-  salesEntries,
-  expensesEntries,
-  addSalesEntry,
-  addExpensesEntry,
-}) {
+export default function CreateEntryScreen() {
+  const { state, dispatch } = useContext(AppContext);
+  const salesEntries = state.salesEntries;
+  const expensesEntries = state.expensesEntries;
   const [type, setType] = useState("Expense");
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
@@ -68,6 +67,14 @@ export default function CreateEntryScreen({
     if (!result.canceled) {
       setImage(result.uri);
     }
+  };
+
+  const addExpensesEntry = (newEntry) => {
+    dispatch({type: "ADD_EXPENSES_ENTRY", payload: { newEntry }});
+  };
+
+  const addSalesEntry= (newEntry) => {
+    dispatch({type: "ADD_SALES_ENTRY", payload: { newEntry }});
   };
 
   const submitEntry = () => {

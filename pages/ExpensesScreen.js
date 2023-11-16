@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "./AppContext";
 import {
   StyleSheet,
   Text,
@@ -11,13 +12,22 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function ExpensesScreen({ expensesEntries, deleteExpensesEntry }) {
+export default function ExpensesScreen() {
+  const { state, dispatch } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const expensesEntries = state.expensesEntries;
 
   const displayImage = (image) => {
     setSelectedImage(image);
     setModalVisible(true);
+  };
+
+  const deleteExpensesEntry = (id) => {
+    dispatch({
+      type: "DELETE_EXPENSES_ENTRY",
+      payload: { id },
+    });
   };
 
   return (

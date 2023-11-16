@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "./AppContext";
 import {
   StyleSheet,
   Text,
@@ -11,13 +12,22 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function SalesScreen({ salesEntries, deleteSalesEntry }) {
+export default function SalesScreen() {
+  const { state, dispatch } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const salesEntries = state.salesEntries;
 
   const displayImage = (image) => {
     setSelectedImage(image);
     setModalVisible(true);
+  };
+
+  const deleteSalesEntry = (id) => {
+    dispatch({
+      type: "DELETE_SALES_ENTRY",
+      payload: { id },
+    });
   };
 
   return (
