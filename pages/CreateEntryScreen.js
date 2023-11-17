@@ -73,6 +73,12 @@ export default function CreateEntryScreen() {
   };
 
   const submitEntry = () => {
+    // if (image === null && title === "" && description === "" && amount === "") {
+    //   setModalVisible(true)
+    //   setModalText()
+    //   break;
+    // }
+
     if (type === "Expense") {
       const newEntry = {
         id: expensesEntries.length + 1,

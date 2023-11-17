@@ -55,7 +55,7 @@ export default function ExpensesScreen() {
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => deleteSalesEntry(entry.id)}
+                onPress={() => deleteExpensesEntry(entry.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
