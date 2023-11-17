@@ -7,9 +7,10 @@ import SalesScreen from "./pages/SalesScreen";
 import ExpensesScreen from "./pages/ExpensesScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import "react-native-gesture-handler";
+import { LogBox } from "react-native";
 
 export default function App() {
-
+  LogBox.ignoreAllLogs();
   const Tab = createBottomTabNavigator();
 
   return (

@@ -19,12 +19,13 @@ export default function CreateEntryScreen() {
   const { state, dispatch } = useContext(AppContext);
   const salesEntries = state.salesEntries;
   const expensesEntries = state.expensesEntries;
-  const [type, setType] = useState("Expense");
+  const [type, setType] = useState("Sale");
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -32,7 +33,10 @@ export default function CreateEntryScreen() {
         const cameraRollStatus =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-        if (cameraRollStatus.status !== "granted" || cameraStatus.status !== "granted") {
+        if (
+          cameraRollStatus.status !== "granted" ||
+          cameraStatus.status !== "granted"
+        ) {
           alert("Sorry, we need camera and camera roll permissions!");
         }
       }
@@ -48,7 +52,7 @@ export default function CreateEntryScreen() {
     });
 
     if (!result.canceled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -60,7 +64,7 @@ export default function CreateEntryScreen() {
     });
 
     if (!result.canceled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -72,12 +76,16 @@ export default function CreateEntryScreen() {
     dispatch({ type: "ADD_SALES_ENTRY", payload: { newEntry } });
   };
 
+  const toggleModalTrue = (text) => {
+    setModalText(text);
+    setModalVisible(true);
+  };
+
   const submitEntry = () => {
-    // if (image === null && title === "" && description === "" && amount === "") {
-    //   setModalVisible(true)
-    //   setModalText()
-    //   break;
-    // }
+    if (!title || !description || !amount || !image) {
+      toggleModalTrue("Please upload an image and fill in all fields");
+      return;
+    }
 
     if (type === "Expense") {
       const newEntry = {
@@ -102,7 +110,7 @@ export default function CreateEntryScreen() {
     setTitle("");
     setDescription("");
     setAmount("");
-    setModalVisible(true);
+    toggleModalTrue("Entry added successfully!");
   };
 
   return (
@@ -134,8 +142,8 @@ export default function CreateEntryScreen() {
           selectedValue={type}
           onValueChange={(itemValue) => setType(itemValue)}
         >
-          <Picker.Item label="Recording an Expense" value="Expense" />
           <Picker.Item label="Recording a Sale" value="Sale" />
+          <Picker.Item label="Recording an Expense" value="Expense" />
         </Picker>
         <TextInput
           style={styles.input}
@@ -172,7 +180,7 @@ export default function CreateEntryScreen() {
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                <Text>Entry Added Successfully!</Text>
+                <Text>{modalText}</Text>
                 <Button title="Close" onPress={() => setModalVisible(false)} />
               </View>
             </View>
@@ -199,7 +207,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   imageContainer: {
-    marginTop: 20,
     width: 200,
     height: 200,
     borderWidth: 1,

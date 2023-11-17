@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../AppContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   StyleSheet,
   Text,
@@ -7,10 +8,9 @@ import {
   Button,
   Image,
   TouchableOpacity,
-  ScrollView,
   Modal,
+  Alert,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SalesScreen() {
   const { state, dispatch } = useContext(AppContext);
@@ -30,6 +30,26 @@ export default function SalesScreen() {
     });
   };
 
+  const validateDelete = (id) => {
+    Alert.alert(
+      "Confirm delete",
+      "Are you sure you want to delete this entry? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => {
+            deleteSalesEntry(id);
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <KeyboardAwareScrollView
       resetScrollToCoords={{ x: 0, y: 0 }}
@@ -38,24 +58,27 @@ export default function SalesScreen() {
       <Text style={styles.titleText}>Tap on each entry to view image</Text>
       <View style={styles.entryContainer}>
         {salesEntries.length > 0 ? (
-          salesEntries.map((entry) => (
+          salesEntries.map((entry, index) => (
             <TouchableOpacity
               key={entry.id}
               style={styles.entry}
               onPress={() => displayImage(entry.image)}
             >
+              <View style={styles.serialNumberContainer}>
+                <Text style={styles.serialNumber}>{`${index + 1}. `}</Text>
+              </View>
               <View style={styles.entryTextContainer}>
                 <Text style={styles.entryText}>{`Title: ${entry.title}`}</Text>
                 <Text
                   style={styles.entryText}
                 >{`Description: ${entry.description}`}</Text>
-                <Text
-                  style={styles.entryText}
-                >{`Amount: $${entry.amount}`}</Text>
+                <Text style={styles.entryText}>{`Amount: $${Number(
+                  entry.amount
+                ).toFixed(2)}`}</Text>
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => deleteSalesEntry(entry.id)}
+                onPress={() => validateDelete(entry.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -177,6 +200,7 @@ const styles = StyleSheet.create({
   entryTextContainer: {
     flex: 1,
     paddingRight: 10,
+    flexDirection: "column",
   },
   deleteButton: {
     backgroundColor: "#4EB151",
@@ -188,6 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
+    marginBottom: 20,
   },
   noRecordsText: {
     fontSize: 16,
@@ -210,5 +235,11 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 20,
+  },
+  serialNumberContainer: {
+    marginTop: -35,
+  },
+  serialNumber: {
+    fontSize: 16,
   },
 });

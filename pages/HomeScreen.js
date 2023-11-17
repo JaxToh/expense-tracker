@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AppContext } from "../AppContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   StyleSheet,
   Text,
@@ -11,9 +13,12 @@ import {
   Modal,
 } from "react-native";
 
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 export default function HomeScreen() {
+  const { state } = useContext(AppContext);
+
+  const totalSales = state.totalSales.toFixed(2);
+  const totalExpenses = state.totalExpenses.toFixed(2);
+  const cashFlow = (totalSales - totalExpenses).toFixed(2);
 
   return (
     <KeyboardAwareScrollView
@@ -21,12 +26,34 @@ export default function HomeScreen() {
       scrollEnabled={true}
     >
       <View style={styles.imageContainer}>
-          <Text style={styles.uploadText}>Graph</Text>
+        <Text style={styles.uploadText}>Graph</Text>
       </View>
       <View style={styles.container}>
-        <Text>Total Sales: </Text>
-        <Text>Total Expenses: </Text>
-        <Text>Cashflow: </Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Total Sales:</Text>
+          <Text style={styles.value}>${totalSales}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Total Expenses:</Text>
+          <Text style={styles.value}>${totalExpenses}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Cashflow:</Text>
+          <Text
+            style={[
+              styles.value,
+              cashFlow < 0 ? styles.negativeCashFlow : styles.positiveCashFlow,
+            ]}
+          >
+            ${cashFlow}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.imageContainer}>
+        <Text style={styles.uploadText}>
+          This section can be used to show rows of month names, each with an export CSV / download
+          button, when we start to capture date of entry creation.
+        </Text>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -63,6 +90,8 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     fontSize: 15,
+    padding: 45,
+    textAlign: "justify"
   },
   buttonContainer: {
     flexDirection: "row",
@@ -133,5 +162,35 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 20,
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+  cashFlowText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  negativeCashFlow: {
+    color: "red",
+  },
+  positiveCashFlow: {
+    color: "darkgreen",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  value: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "right",
   },
 });
