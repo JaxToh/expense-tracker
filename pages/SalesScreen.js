@@ -9,13 +9,13 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  Alert,
 } from "react-native";
 
 export default function SalesScreen() {
   const { state, dispatch } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [entryToDelete, setEntryToDelete] = useState(null);
   const salesEntries = state.salesEntries;
 
   const displayImage = (image) => {
@@ -30,24 +30,22 @@ export default function SalesScreen() {
     });
   };
 
-  const validateDelete = (id) => {
-    Alert.alert(
-      "Confirm delete",
-      "Are you sure you want to delete this entry? This action cannot be undone.",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Delete",
-          onPress: () => {
-            deleteSalesEntry(id);
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+  const confirmDelete = (id) => {
+    setEntryToDelete(id);
+    setModalVisible(true);
+  };
+
+  const proceedWithDelete = () => {
+    if (entryToDelete) {
+      deleteSalesEntry(entryToDelete);
+      setEntryToDelete(null);
+      setModalVisible(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setEntryToDelete(null);
+    setModalVisible(false);
   };
 
   return (
@@ -55,7 +53,7 @@ export default function SalesScreen() {
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
     >
-      <Text style={styles.titleText}>Tap on each entry to view image</Text>
+      <Text style={styles.titleText}>Tap on each entry to view an image</Text>
       <View style={styles.entryContainer}>
         {salesEntries.length > 0 ? (
           salesEntries.map((entry, index) => (
@@ -78,7 +76,7 @@ export default function SalesScreen() {
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => validateDelete(entry.id)}
+                onPress={() => confirmDelete(entry.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -107,6 +105,22 @@ export default function SalesScreen() {
                 style={styles.modalImage}
               />
               <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </Modal>
+      )}
+      {entryToDelete && (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={cancelDelete}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text>Confirm delete?</Text>
+              <Button title="Delete" onPress={proceedWithDelete} />
+              <Button title="Cancel" onPress={cancelDelete} />
             </View>
           </View>
         </Modal>

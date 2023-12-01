@@ -9,14 +9,14 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  Alert,
 } from "react-native";
 
 export default function ExpensesScreen() {
   const { state, dispatch } = useContext(AppContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const expensesEntries = state.expensesEntries;
+  const [entryToDelete, setEntryToDelete] = useState(null);
+  const  expensesEntries = state.expensesEntries;
 
   const displayImage = (image) => {
     setSelectedImage(image);
@@ -30,24 +30,22 @@ export default function ExpensesScreen() {
     });
   };
 
-  const validateDelete = (id) => {
-    Alert.alert(
-      "Confirm delete",
-      "Are you sure you want to delete this entry? This action cannot be undone.",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Delete",
-          onPress: () => {
-            deleteExpensesEntry(id);
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+  const confirmDelete = (id) => {
+    setEntryToDelete(id);
+    setModalVisible(true);
+  };
+
+  const proceedWithDelete = () => {
+    if (entryToDelete) {
+      deleteExpensesEntry(entryToDelete);
+      setEntryToDelete(null);
+      setModalVisible(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setEntryToDelete(null);
+    setModalVisible(false);
   };
 
   return (
@@ -55,7 +53,7 @@ export default function ExpensesScreen() {
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
     >
-      <Text style={styles.titleText}>Tap on each entry to view image</Text>
+      <Text style={styles.titleText}>Tap on each entry to view an image</Text>
       <View style={styles.entryContainer}>
         {expensesEntries.length > 0 ? (
           expensesEntries.map((entry, index) => (
@@ -78,7 +76,7 @@ export default function ExpensesScreen() {
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => validateDelete(entry.id)}
+                onPress={() => confirmDelete(entry.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -107,6 +105,22 @@ export default function ExpensesScreen() {
                 style={styles.modalImage}
               />
               <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </Modal>
+      )}
+      {entryToDelete && (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={cancelDelete}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text>Confirm delete?</Text>
+              <Button title="Delete" onPress={proceedWithDelete} />
+              <Button title="Cancel" onPress={cancelDelete} />
             </View>
           </View>
         </Modal>
@@ -200,6 +214,7 @@ const styles = StyleSheet.create({
   entryTextContainer: {
     flex: 1,
     paddingRight: 10,
+    flexDirection: "column",
   },
   deleteButton: {
     backgroundColor: "#4EB151",
